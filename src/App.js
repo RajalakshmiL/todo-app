@@ -1,25 +1,32 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState, useEffect } from 'react'
+import Header from './pages/Header'
+import Body from './pages/Body'
 
-function App() {
+const App = () => {
+  const oldTasks = localStorage.getItem('tasks');
+
+  const [Tasks, setTasks] = useState(JSON.parse(oldTasks) || []);
+
+  
+
+  // Delete Task card
+  const HandleDelete = (taskIndex) => {
+    const filteredTasks = Tasks.filter((task,index) => index !== taskIndex);
+    setTasks(filteredTasks);
+  }
+
+  //local storage of the task
+  useEffect(()=>{
+    localStorage.setItem('tasks',JSON.stringify(Tasks))
+  },[Tasks])
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    <>
+      <Header setTasks={setTasks}/>
+      <Body tasks={Tasks} HandleDelete={HandleDelete} setTasks={setTasks}/>
+      
+ 
+    </>
+  )
 }
 
-export default App;
+export default App
